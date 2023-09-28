@@ -4,14 +4,13 @@ This repo contains comprehensive [statistics](#statistics) on graph data augment
 
 
 ## Statistics
-Edge perturbation is regarded as the fundamental modification to the graph structure. Recently, edge perturbation methods have been used in GNN-related domains to make augmentation or inject attacks to graphs. Typically, edge perturbation methods for GNNs propose to add or remove edges to enable topology-level modifications. The perturbed graph is then fed to a GNN for learning, which will cause distinct variations in model accuracy on downstream tasks. Existing literature on edge perturbation can be divided into two veins according to their purposes, that is, graph data augmentation and attack (Gaug and Gatk).
-
+Edge perturbation is regarded as the fundamental modification to the graph structure. Recently, edge perturbation methods have been used in GNN-related domains to make augmentation or inject attacks to graphs. Typically, edge perturbation methods for GNNs propose to add or remove edges to enable topology-level modifications. The perturbed graph is then fed to a GNN for learning, which will cause distinct variations in model accuracy on downstream tasks. Existing literature on edge perturbation can be divided into two veins according to their purposes, that is, graph data augmentation and attack (Gaug and Gatk). We remark that graph-related tasks, including node classification, graph classification, and link prediction, are abbreviated as NC, GC, and LP, respectively
 
 <div align="center">
   
 | Category | Method | Venue | Approach | Applied GNN Model | Task | Code |
 | ---------- | ----------- | ----------- | ----------- | ----------- |  ----------- | ----------- |
-| Gaug | [DropEdge](https://arxiv.org/abs/1907.10903) | ICLR'20 | Remove Edges | GCN, GraphSAGE, Deepgcns, ASGCN | Node Classification | [Available](https://github.com/DropEdge/DropEdge) |
+| Gaug | [DropEdge](https://arxiv.org/abs/1907.10903) | ICLR'20 | Remove Edges | GCN, GraphSAGE, Deepgcns, ASGCN | NC | [Available](https://github.com/DropEdge/DropEdge) |
 | Gaug | [NeuralSparse](https://proceedings.mlr.press/v119/zheng20d.html) | ICML'20 | Remove Edges | GCN, GraphSAGE, GAT, GIN | NC | - | 
 | Gaug | [SGCN](https://link.springer.com/chapter/10.1007/978-3-030-47426-3_22) | PAKDD'20 | Remove Edges | GCN, GraphSAGE | NC | [Available](https://github.com/shuaishiliu/SGCN) |
 | Gaug | [AdaptiveGCN](https://dl.acm.org/doi/abs/10.1145/3459637.3482049) | CIKM'21 | Remove Edges | GCN, GraphSAGE, GIN | NC | [Available](https://github.com/GuangmingZhu/AdaptiveGCN) |
@@ -51,34 +50,35 @@ To try our codes, you should do it by two steps.
 
 Example:
 
-EPD Stage 1: Augmentation: 
+EPD Solution I: Augmentation: 
 
-Augment via delete 100 hete edges on dataset cora:
+An example: Make augmentation by removing 100 heterophilic edges on cora:
 ```
 python EPDS1.py -dataset cora -heteE 100 -homoE 0 -type aug
 ```
-EPD Stage 1: Attack: 
+EPD Solution I: Attack: 
 
-Attack via add 100 hete edges on dataset cora:
+An example: Inject Attack by adding 100 heterophilic edges on cora:
 ```
 python EPDS1.py -dataset cora -heteE 100 -homoE 0 -type atk
 ```
+EPD Solution II: Augmentation: 
+```
+python EPDS2.py -heteE 100 -homoE 0 -dataset cora -epochs 10 -rn 1 -type aug 
+```
 
-To implement EPD Stage 2, you should run `bridge_matrix.py` first, which aims to find all the bridge edges for generating adversarial graph.
+EPD Solution II: Attack: 
+To implement EPD Solution II for attack, you should run `bridge_matrix.py` first, which aims to find all bridge edges in target-guided modification.
 
 ```
 python bridge_matrix.py -dataset cora
 ```
-The result of corresponding dataset will be saved in the root dir with `dataset_name +_bridges.npy`
+The result, named `dataset_name +_bridges.npy`, will be saved in the root dir.
 
-By using the result, you are able to execute Stage 2 attack, for example:
+Further, you can execute the attack method in Solution II, for example:
 
 ```
 python EPDS2.py -heteE 100 -homoE 0 -dataset cora -type atk
 ```
 
-The Stage 2 augment:
 
-```
-python EPDS2.py -heteE 100 -homoE 0 -dataset cora -epochs 10 -rn 1 -type aug 
-```
