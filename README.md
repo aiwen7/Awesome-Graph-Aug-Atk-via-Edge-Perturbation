@@ -44,9 +44,7 @@ Edge perturbation is regarded as the fundamental modification to the graph struc
 
 ## Implementation
 
-To try our codes, you should do it by two steps.
-
-`cd /EPD` <br>
+Please follow the scripts to run two solutions of EPD.
 
 Example:
 
