@@ -75,13 +75,7 @@ python EPDS2.py -heteE 100 -homoE 0 -dataset cora -epochs 10 -rn 1 -type aug
 ```
 EPD Solution II:
 
-To implement EPD Solution II for attack, please run `bridge_matrix.py` first, which aims to find and remove all bridge edges in the target-guided modification.
-```
-python bridge_matrix.py -dataset cora
-```
-The result, named `dataset_name +_bridges.npy`, will be saved in the current dir for further usage.
-
-Next, you can execute the attack method in Solution II, for example:
+An example of attack: Make attack after applying the target-guided modification to cora
 ```
 python EPDS2.py -heteE 100 -homoE 0 -dataset cora -type atk
 ```
