@@ -17,7 +17,7 @@ from scipy.optimize import minimize
 from utils_bridges import *
 import os
 from argparse import ArgumentParser, ArgumentDefaultsHelpFormatter
-from GCN import *
+#from GCN import *
 from utils import *
 import time
 from nparray2dict import *
@@ -109,11 +109,6 @@ class Tarjan_Bridges:
 
         return self.bridges
 
-cur_path = os.path.abspath('.')
-for path in ["cora","citeseer","pubmed"]:
-    if not os.path.exists(os.path.join(cur_path, 'GF_Attack_logs', path)):
-            os.makedirs(os.path.join(cur_path, 'GF_Attack_logs', path))
-
 parser = ArgumentParser("rdlink_gcn",
                         formatter_class=ArgumentDefaultsHelpFormatter,
                         conflict_handler='resolve')
@@ -132,7 +127,6 @@ adj_train = adj[train_index, :][:, train_index]
 num_train = adj_train.shape[0]
 dataset = args.dataset
 
-perturb_save_logs = os.path.join(cur_path, 'EPD_logs/' + dataset + '/Edge_Perturbation_Detector_bestone.txt')
 edge_count = adj_train.nnz
 
 A_I = adj_train + sp.eye(adj_train.shape[0])
