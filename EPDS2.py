@@ -133,15 +133,19 @@ if args.type == 'aug':
     
 elif args.type == 'atk':
     num_nodes = adj.shape[0]
+    tmp_adj = np.array(adj.todense())
     exclude_nodes = range(num_nodes - 1000, num_nodes)
     tb = Tarjan_Bridges(adj)
     bridges = tb.find_bridges()
-
     filtered_bridge_edges = [edge for edge in bridges if edge[0] not in exclude_nodes and edge[1] not in exclude_nodes]
     bridges = filtered_bridge_edges
     num_to_remove = len(bridges)
     edges_to_remove = bridges
-    adj_full_numpy = atk(args.dataset, adj.toarray(), args.heteE, args.homoE, edges_to_remove)
+    for edge in edges_to_remove:
+        node1, node2 = edge[0], edge[1]
+        tmp_adj[node1, node2] = 0
+        tmp_adj[node2, node1] = 0
+    adj_full_numpy = atk(args.dataset, tmp_adj, args.heteE, args.homoE, edges_to_remove)
     adj_forcas = adj_full_numpy + np.eye(adj_full_numpy.shape[0])
     cas(adj.toarray(), adj_forcas, args.dataset)
     np.save(args.dataset+"_adj_"+args.type, adj_full_numpy)
